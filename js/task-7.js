@@ -23,19 +23,17 @@ const account = {
   // История транзакций
   transactions: [],
 
-  lastId: 0,
-
   /*
    * Метод создает и возвращает объект транзакции.
    * Принимает сумму и тип транзакции.
    */
 
   createTransaction(amount, type) {
-    let transaction = {};
-    transaction.id = this.lastId + 1;
-    this.lastId += 1;
-    transaction.type = type;
-    transaction.amount = amount;
+    let transaction = {
+      amount,
+      type,
+      id:this.transactions.length + 1
+    };
     return this.transactions.push(transaction);
   },
 
@@ -48,8 +46,8 @@ const account = {
 
   deposit(amount) {
     const type = Transaction.DEPOSIT;
-    this.createTransaction(amount, type);
     this.balance += amount;
+    this.createTransaction(amount, type);
   },
 
   /*
@@ -65,8 +63,8 @@ const account = {
   withdraw(amount) {
     const type = Transaction.WITHDRAW;
     if (this.balance >= amount) {
-      this.createTransaction(amount, type);
       this.balance -= amount;
+      this.createTransaction(amount, type);
     } else {
       console.log('Cнятие такой суммы не возможно, недостаточно средств.');
     }
