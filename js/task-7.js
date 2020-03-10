@@ -29,12 +29,7 @@ const account = {
    */
 
   createTransaction(amount, type) {
-    let transaction = {
-      amount,
-      type,
-      id:this.transactions.length + 1
-    };
-    return this.transactions.push(transaction);
+    return { amount, type, id: this.transactions.length + 1 };
   },
 
   /*
@@ -47,7 +42,8 @@ const account = {
   deposit(amount) {
     const type = Transaction.DEPOSIT;
     this.balance += amount;
-    this.createTransaction(amount, type);
+    let transaction = this.createTransaction(amount, type);
+    return this.transactions.push(transaction);
   },
 
   /*
@@ -64,7 +60,8 @@ const account = {
     const type = Transaction.WITHDRAW;
     if (this.balance >= amount) {
       this.balance -= amount;
-      this.createTransaction(amount, type);
+      let transaction = this.createTransaction(amount, type);
+      return this.transactions.push(transaction);
     } else {
       console.log('Cнятие такой суммы не возможно, недостаточно средств.');
     }
@@ -108,7 +105,6 @@ const account = {
   },
 };
 
-
 account.deposit(575);
 console.log(account.getBalance());
 account.deposit(45);
@@ -120,5 +116,7 @@ console.log(account.getBalance());
 account.withdraw(800);
 console.log(account.getTransactionDetails(3));
 
-console.log(`Withdrawals: ${account.getTransactionTotal(Transaction.WITHDRAW)}`);
+console.log(
+  `Withdrawals: ${account.getTransactionTotal(Transaction.WITHDRAW)}`,
+);
 console.log(`Deposits: ${account.getTransactionTotal(Transaction.DEPOSIT)}`);
